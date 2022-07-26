@@ -1,20 +1,38 @@
 const axios = require("axios");
 
-
-
+let inMemory = {}
+console.log(inMemory);
 ///// Movies-Api express Functionality /////
 function GetMoviesApi(req, res) {
     let cityName = req.query.cityName;
+    // console.log(inMemory[cityName]);
     try {
+    /// movies Api with Key and search Query by cite's name ///
       // let moviesUrl = `https://api.themoviedb.org/3/search/movie?api_key=220df3e1b427989999446f230e82613d&query=${cityName}`;
       let moviesUrl = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIES_API_KEY}&query=${cityName}`;
-      axios.get(moviesUrl).then((response) => {
-          console.log(response.data.results);
-        let allData = response.data.results.map((ApiData) => {
-          return new Movies(ApiData);
+      
+      if(inMemory[cityName] != undefined){
+      
+console.log('data already exists in server');
+        res.send(inMemory[cityName]);
+      }
+      
+      else{
+  
+        axios.get(moviesUrl).then((response) => {
+            // console.log(response.data.results);
+          let allData = response.data.results.map((ApiData) => {
+            return new Movies(ApiData);
+          });
+         
+          console.log('send requrest to movies Api!');
+          inMemory[cityName] = allData
+          console.log(inMemory[cityName]);
+          res.status(500).send(allData);
+        
         });
-        res.status(201).send(allData);
-      });
+
+      }
     } catch (err) {
       console.error(err);
     }

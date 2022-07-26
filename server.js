@@ -18,12 +18,4 @@ server.get("/weather", GetWeatherApi);
 /// Movies Api End Point + MoviesApi express Functionality
 server.get("/movies", GetMoviesApi);
 
-
-
-
-
-
-
-
-
 server.listen(PORT, () => console.log(`server Running on port ${PORT}`));
